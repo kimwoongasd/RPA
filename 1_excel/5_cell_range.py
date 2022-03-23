@@ -1,5 +1,6 @@
 from openpyxl import Workbook
 from random import *
+from openpyxl.utils.cell import coordinate_from_string
 
 wb = Workbook()
 ws = wb.active
@@ -30,7 +31,12 @@ for i in range(1, 11):
 rows_range = ws["2:6"]
 for i in rows_range:
     for x in i:
-        print(x.value, end=' ')
+        # print(x.value, end=' ')
+        # print(x.coordinate, end=' ') # cell의 좌표정보를 가져온다
+        xy = coordinate_from_string(x.coordinate) # row와 column 를 분리
+        # print(xy, end=' ')
+        print(xy[0], end='')
+        print(xy[1], end=' ')
     print()
   
 wb.save('sample2.xlsx')
