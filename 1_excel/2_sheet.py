@@ -15,5 +15,19 @@ ws.sheet_properties.tabColor = 'ff66ff'
 # 주어진 이름으로 sheet 생성
 ws_1 = wb.create_sheet('Yoursheet')
 
+# 2번쨰 index에 sheet 생성
+ws_2 = wb.create_sheet("Newsheet", 2)
+
+# dict 형태로 sheet에 접근
+new_ws = wb["Newsheet"]
+
+# 모든 sheet 이름 확인
+print(wb.sheetnames)
+
+# sheet 복사
+new_ws["A1"] = 'Test'
+target = wb.copy_worksheet(new_ws)
+target.title = 'Copied sheet'
+
 wb.save('sample.xlsx')
 wb.close()
