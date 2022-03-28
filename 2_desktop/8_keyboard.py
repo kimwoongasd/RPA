@@ -30,5 +30,11 @@ w.activate()
 
 # 한글처리 pip install pyperclip
 # 글자를 클립보드에 저장 : ctrl + c
-pyperclip.copy("나도 코딩")
-pyautogui.hotkey("ctrl", "v")
+# pyperclip.copy("나도 코딩")
+# pyautogui.hotkey("ctrl", "v")
+
+def kor_write(text):
+    pyperclip.copy(text)
+    pyautogui.hotkey("ctrl", "v")
+
+kor_write("나도 코딩")
