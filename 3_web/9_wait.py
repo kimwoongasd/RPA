@@ -10,8 +10,8 @@ browser = webdriver.Chrome(service=service)
 browser.get('')
 time.sleep(2)
 
-start_port = ''
-arrive_port = ''
+start_port = "" 
+arrive_port = '' 
 
 browser.find_element(By.XPATH, '//*[@id="__next"]/div/div[1]/div[4]/div/div/div[2]/div[1]/button[1]/b').click()
 time.sleep(2)
@@ -55,14 +55,17 @@ except:
 browser.find_element(By.XPATH, '//*[@id="__next"]/div/div[1]/div[4]/div/div/button/span').click()
 
 # 로딩시간 대기
-# 페이지가 변경되서 결과 안나옴
 try:
-    elem = WebDriverWait(browser, 15).until(EC.presence_of_element_located((By.XPATH, '//*[@id="__next"]/div/div[1]/div[4]/div/div[2]/div[2]/div/button')))
+    elem = WebDriverWait(browser, 15).until(EC.presence_of_element_located((By.XPATH, '//*[@id="__next"]/div/div[1]/div[4]/div/div[2]/div[2]')))
     time.sleep(5)
-    print(elem.tetxt)
+    print(elem.text)
 
 except:
     print("결과 검색 없음")
 
+# time.sleep(15)
+# elem = browser.find_element(By.XPATH, '//*[@id="__next"]/div/div[1]/div[4]/div/div[2]/div[2]')
+# print(elem.text)
+
 time.sleep(5)
-# browser.quit()
+browser.quit()
