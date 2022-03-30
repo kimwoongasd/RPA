@@ -3,9 +3,11 @@ from acount import *
 from random import *
 from email.message import EmailMessage
 from imap_tools import MailBox
+from openpyxl import Workbook
 
 
 names = ["유재석", "박명수", "하하", "이광수", "김종국"]
+
 
 
 with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
@@ -20,7 +22,7 @@ with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
         msg["From"] = EMAIL_ADDRESS
         msg["To"] = EMAIL_ADDRESS
         phone = randint(1000, 9999)
-        msg.set_content(f"{name}/{phone}")
+        msg.set_content(f"{name}/{str(phone)}")
         smtp.send_message(msg)
         
 
@@ -35,21 +37,32 @@ with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
     for mail in mailbox.fetch('(SENTSINCE 30-Mar-2022)', reverse=False):
         msg = EmailMessage()
         
-        # 선정 안내 메일 보내기 (선착순 3명)
-        if "신청" in mail.subject and count < 4:
-            msg["Subject"] = "파이썬 특강 안내 [선정]"
-            msg["From"] = EMAIL_ADDRESS
-            msg["To"] = EMAIL_ADDRESS
-            msg.set_content(f"{mail.text[:3]}님 축하드립니다. 특강 대상자로 선정되셨습니다. (선정순번 {count}번)")
-            count += 1
-            smtp.send_message(msg)
-        
-        # 탈락자 안내 메일 보내기
-        elif "신청" in mail.subject:
-            msg["Subject"] = "파이썬 특강 안내 [탈락]"
-            msg["From"] = EMAIL_ADDRESS
-            msg["To"] = EMAIL_ADDRESS
-            msg.set_content(f"{mail.text[:3]}님 아쉽게도 탈락입니다. 취소 인원이 발생하는 경우 연락드리겠습니다. (대기순번 {wait}번)")
-            wait += 1
-            smtp.send_message(msg)
+        try:
+        # 이름과 전화번호 분리
+            nickname, number = mail.text.strip().split("/")
+
+            # 선정 안내 메일 보내기 (선착순 3명)
+            if "신청" in mail.subject and count < 4:
+                msg["Subject"] = "파이썬 특강 안내 [선정]"
+                msg["From"] = EMAIL_ADDRESS
+                msg["To"] = EMAIL_ADDRESS
+                msg.set_content(f"{nickname}님 축하드립니다. 특강 대상자로 선정되셨습니다. (선정순번 {count}번)")
+                # msg.set_content(f"{mail.text[:3]}님 축하드립니다. 특강 대상자로 선정되셨습니다. (선정순번 {count}번)")
+                smtp.send_message(msg)
+                
+                
+                count += 1
+            
+            # 탈락자 안내 메일 보내기
+            elif "신청" in mail.subject:
+                msg["Subject"] = "파이썬 특강 안내 [탈락]"
+                msg["From"] = EMAIL_ADDRESS
+                msg["To"] = EMAIL_ADDRESS
+                msg.set_content(f"{nickname}님 아쉽게도 탈락입니다. 취소 인원이 발생하는 경우 연락드리겠습니다. (대기순번 {wait}번)")
+                # msg.set_content(f"{mail.text[:3]}님 아쉽게도 탈락입니다. 취소 인원이 발생하는 경우 연락드리겠습니다. (대기순번 {wait}번)")
+                wait += 1
+                smtp.send_message(msg)
+                
+        except:
+            continue
 
