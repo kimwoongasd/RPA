@@ -8,7 +8,8 @@ from openpyxl import Workbook
 
 names = ["유재석", "박명수", "하하", "이광수", "김종국"]
 
-
+# 당첨자 리스트
+winner = []
 
 with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
     smtp.ehlo()
@@ -50,7 +51,8 @@ with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
                 # msg.set_content(f"{mail.text[:3]}님 축하드립니다. 특강 대상자로 선정되셨습니다. (선정순번 {count}번)")
                 smtp.send_message(msg)
                 
-                
+                # 당첨자 추가
+                winner.append({"number" : count, "name" : nickname, "phone" : number})
                 count += 1
             
             # 탈락자 안내 메일 보내기
@@ -66,3 +68,13 @@ with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
         except:
             continue
 
+        # 당첨자 xlsx파일 만들기
+        wb = Workbook()
+        ws = wb.active
+        
+        ws.append(["순번", "이름", "전화번호"])
+        for file in winner:
+            ws.append(list(file.values()))
+            
+        wb.save("winner_list.xlsx")
+        wb.close()
