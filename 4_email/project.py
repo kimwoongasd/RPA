@@ -46,7 +46,7 @@ with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
             if "신청" in mail.subject and count < 4:
                 msg["Subject"] = "파이썬 특강 안내 [선정]"
                 msg["From"] = EMAIL_ADDRESS
-                msg["To"] = EMAIL_ADDRESS
+                msg["To"] = mail.from_
                 msg.set_content(f"{nickname}님 축하드립니다. 특강 대상자로 선정되셨습니다. (선정순번 {count}번)")
                 # msg.set_content(f"{mail.text[:3]}님 축하드립니다. 특강 대상자로 선정되셨습니다. (선정순번 {count}번)")
                 smtp.send_message(msg)
@@ -59,7 +59,7 @@ with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
             elif "신청" in mail.subject:
                 msg["Subject"] = "파이썬 특강 안내 [탈락]"
                 msg["From"] = EMAIL_ADDRESS
-                msg["To"] = EMAIL_ADDRESS
+                msg["To"] = mail.from_
                 msg.set_content(f"{nickname}님 아쉽게도 탈락입니다. 취소 인원이 발생하는 경우 연락드리겠습니다. (대기순번 {wait}번)")
                 # msg.set_content(f"{mail.text[:3]}님 아쉽게도 탈락입니다. 취소 인원이 발생하는 경우 연락드리겠습니다. (대기순번 {wait}번)")
                 wait += 1
