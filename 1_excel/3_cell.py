@@ -1,5 +1,3 @@
-import imp
-from operator import index
 from openpyxl import Workbook
 from random import *
 
